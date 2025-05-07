@@ -1,5 +1,5 @@
 import { cwd } from "process";
-import { lockUpInStack } from "./utils";
+import { getCallerInfo, lockUpInStack } from "./utils";
 import { CTXTConfig } from "./config";
 
 
@@ -48,19 +48,18 @@ export default class ctxt {
      */
     private  async print(level: ctxtLogLevel, option: ctxtCallConfig) {
         // Extract anchor
-        let anchor = lockUpInStack(9) as string;
-        anchor = anchor?.replace(cwd(), "") || "";
-        anchor = (anchor?.match(/\((.*?)\)/) as string[] | null)?.[1] || "unknown";
+        let anchor = getCallerInfo();
+        const tar = `#${anchor.fileName}${anchor.lineNumber}:${anchor.columnNumber}`
 
         // Register and threshold check
         const config = this.getConfig();
-        const count = this.registerLogEntry(anchor, level);
+        const count = this.registerLogEntry(tar, level);
         const threshold = option.threshold ?? 0;
 
         if (count < threshold){ 
             return;
         } else {
-             this.resetLogEntry(anchor, level);
+             this.resetLogEntry(tar, level);
         }
 
         const logEntry = {
@@ -76,7 +75,7 @@ export default class ctxt {
         const silentProd = config.silentInProd && process.env.NODE_ENV === "production";
 
         if (!(silentDev || silentProd)) {
-            console.log(`[CTXT/${level}][${anchor}] → ${option.send} ${ option.trace ? "\n\n    Stack Trace : " + option.trace : "" }`);
+            console.log(`[CTXT/${level}][${tar}] → ${option.send} ${ option.trace ? "\n\n    Stack Trace : " + option.trace : "" }`);
         }
     }
 
@@ -101,6 +100,7 @@ export default class ctxt {
     public  fatal = this.createLogguer("fatal");
 
     public  assert(condition: boolean, config: ctxtCallConfig & { level?: ctxtLogLevel }) {
-        if (!condition) this.print(config.level ?? "warn", config);
+        if (!condition) 
+            this.print(config.level ?? "warn", config);
     }
 }

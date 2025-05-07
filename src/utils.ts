@@ -1,3 +1,5 @@
+import callsites from 'callsites';
+
 /**
  * @purpose  utility function meant to allow stack look up at a given index
  * @param { Number } at - the index from of with to return the stack info
@@ -30,5 +32,18 @@ export function lockUpInStack(at?: number): Array<string> | string | null {
     }
 
     return anchor[at];
+}
+
+
+export function getCallerInfo() {
+  const stack = callsites();
+  // Index 0 is this function, index 1 is the caller
+  const caller = stack[3];
+  return {
+    fileName: caller.getFileName(),
+    lineNumber: caller.getLineNumber(),
+    columnNumber: caller.getColumnNumber(),
+    functionName: caller.getFunctionName(),
+  };
 }
 

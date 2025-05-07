@@ -1,6 +1,5 @@
-import config from "/home/cat/.linksox/Projects/Project-Console.txt/ctxtconfig"
-
-import consoleDotTXT from "./ctxt";
-const ctxt = new consoleDotTXT();
+import config from "/home/cat/.linksox/Projects/Experiment/TestCtxt/mtxt-config"
+import consoleDotTXT from "./mtxt";
+const mtxt = new consoleDotTXT();
 consoleDotTXT.init(config);
-export default ctxt;
+export default mtxt;
