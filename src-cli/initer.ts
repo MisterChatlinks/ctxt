@@ -1,5 +1,6 @@
-import fs from "fs";
 import inquirer from "inquirer";
+import { join } from "path";
+import { writeFileSync, existsSync } from "fs";
 
 const log = (...args: unknown[]) => {
     const msg = args.join(" ");
@@ -87,7 +88,7 @@ export async function initCtxt(outPath: string) {
         answers = { ...answers, ...optional };
     }
 
-    if (fs.existsSync(outPath)) {
+    if (existsSync(outPath)) {
         log(`⚠️ The file "ctxtconfig.ts" already exists.`);
 
         const { overwrite } = await inquirer.prompt([
@@ -105,9 +106,11 @@ export async function initCtxt(outPath: string) {
         }
     }
 
-    fs.writeFileSync(outPath, mkTemplate({ ...answers }));
+    writeFileSync(outPath, mkTemplate({ ...answers }));
+   
+    writeFileSync(join(__dirname, "mtxt-config.path" ), outPath, { encoding: "utf-8" })
     
-    log("✅ Created ctxtconfig.ts");
+    log("✅ Created mtxt-config.ts");
 
     return outPath
 }
