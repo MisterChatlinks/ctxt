@@ -1,0 +1,33 @@
+{
+  "name": "ctxt",
+  "version": "0.0.0@beta",
+  "description": "console utility for live monitoring",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",  
+  "exports":{
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
+  "keywords": [
+    "console",
+    "logger",
+    "structured-logging",
+    "monitoring"
+  ],
+  "scripts":{
+    "init": "src-cli/index.ts init",
+    "watch" : "src-cli/index.ts -watch",
+    "build": "tsup src/index.ts --format cjs,esm --dts"
+  }, 
+  "types": "./dist/index.d.ts",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^22.15.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "vitest": "^3.1.2"
+  }
+}

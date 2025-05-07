@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+
+    "strict": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@ctxt/config": ["./ctxtconfig.js"]
+    },
+    "module": "NodeNext",
+    "target": "ESNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
+    "esModuleInterop": true,
+  }
+}
