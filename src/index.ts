@@ -1,4 +1,4 @@
-import config from "/home/cat/.linksox/Projects/Project-Console.txt/mtxtconfig"
+        import config from "/home/cat/.linksox/Projects/Project-Console.txt/src/mtxtconfig"
         import consoleDotTXT from "./mtxt";
         const mtxt = new consoleDotTXT();
         consoleDotTXT.init(config);
