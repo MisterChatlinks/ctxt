@@ -4,9 +4,12 @@ import { buildCtxt } from "./builder";
 import { watchConfig } from "./watcher";
 import { join } from "path";
 import { cwd } from "process";
+import { devMTXTConfigPathRef, mtxtIsInDevellopement, userConfigFileName } from "./devVar";
 
-const outPath = join(cwd(), "mtxt-config.ts");
 const command = process.argv.slice(2);
+const outPath = command.includes(mtxtIsInDevellopement) 
+            ? join(devMTXTConfigPathRef)
+            : join(cwd(), userConfigFileName);
 
 (async()=>{ 
     if(command.includes("init")){
@@ -14,6 +17,6 @@ const command = process.argv.slice(2);
         buildCtxt(outPath)
     } 
     if(command.includes("-watch")){
-            watchConfig(outPath)
+        watchConfig(outPath)
     }
 })()
