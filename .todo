@@ -1,6 +1,5 @@
  # TODOs for monitor-txt
 
-- [ ] Change the cli's whatcher logic, node's watch method is too unstable 
 - [ ] Add file/line trace support for external projects
 - [ ] Improve threshold-based logging
 - [ ] Add unit tests for CLI config generator
@@ -8,3 +7,4 @@
 
 Nice-to-have:
 - [ ] Create web dashboard MVP
+- [ ] Vs Code Extenstion for Config Generation

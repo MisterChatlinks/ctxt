@@ -1,6 +1,6 @@
 {
   "name": "monitor-txt",
-  "version": "0.0.2-beta",
+  "version": "0.0.5",
   "description": "console utility for live monitoring",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
