@@ -1,17 +1,30 @@
 import inquirer from "inquirer";
-import { join } from "path";
 import { writeFileSync, existsSync } from "fs";
+import { writeInConfigMap } from "./utils";
+import { devConfigFileName, devMTXTConfigPathRef, mtxtIsInDevellopement, userConfigFileName, userConfigPathRefFileIsFileName, userMTXTConfigFilePathRef } from "./devVar";
 
 const log = (...args: unknown[]) => {
     const msg = args.join(" ");
     console.log(`\n${msg}\n${"=".repeat(msg.length)}\n`);
 };
 
-const mkTemplate = (template: Record<string, any>) => {
+const mkTemplate = (template: Record<string, any>, outPath: string) => {
     const { apiKey, devMode, ...rest } = template;
   
-    let configString = `// Auto-generated CTXT config file\n`;
-    configString += `// - Never expose devMode = true or API keys in production bundles\n\n`;
+    let configString = outPath !== devMTXTConfigPathRef 
+    ? `/**
+        * Auto-generated CTXT config file
+        * Never expose devMode = true or API keys in production bundles\n\n 
+        */
+    `.trim() + "\n"
+
+    : `/**
+        * This file is meant for and only for developping mtxt
+        * by it's nature, it require a config file to run properly.
+        * 
+        * when developing, by using \`${mtxtIsInDevellopement}\` flag on can use this file instead of creating a new confid file at root 
+        */
+    `.trim() + "\n"
   
     const partialConfig = {
       ...rest,
@@ -19,7 +32,7 @@ const mkTemplate = (template: Record<string, any>) => {
       apiKey: apiKey ? apiKey : "<YOUR_API_KEY>",
     };
   
-    configString += `const config = ${JSON.stringify(partialConfig, null, 2)};\n\n`;
+    configString += `const config = ${ JSON.stringify(partialConfig, null, 2) };\n\n`;
     configString += `export default config;\n`;
   
     return configString;
@@ -27,6 +40,8 @@ const mkTemplate = (template: Record<string, any>) => {
 
 export async function initCtxt(outPath: string) {
     log("| ✨ CTXT Config helper");
+
+    const outFileName =  outPath == devMTXTConfigPathRef ? devConfigFileName : userConfigFileName;
 
     let answers = await (inquirer.prompt as any)([
         {
@@ -89,7 +104,7 @@ export async function initCtxt(outPath: string) {
     }
 
     if (existsSync(outPath)) {
-        log(`⚠️ The file "ctxtconfig.ts" already exists.`);
+        log(`⚠️ The file ${outFileName} already exists.`);
 
         const { overwrite } = await inquirer.prompt([
             {
@@ -106,11 +121,11 @@ export async function initCtxt(outPath: string) {
         }
     }
 
-    writeFileSync(outPath, mkTemplate({ ...answers }));
-   
-    writeFileSync(join(__dirname, "mtxt-config.path" ), outPath, { encoding: "utf-8" })
+    writeFileSync(outPath, mkTemplate({ ...answers }, outPath));
+  
+    writeInConfigMap(userConfigPathRefFileIsFileName, outPath);
     
-    log("✅ Created mtxt-config.ts");
+    log(`✅ Created ${outFileName}`);
 
     return outPath
 }
