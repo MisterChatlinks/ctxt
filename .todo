@@ -1,10 +1,23 @@
+# TODOs for Monitext Website
+
+- [] Codux UI
+- [] Backend logic (MERISE)
+- [] Backend integration
+- [] DB design & hosting
+- [] Frontend + backend hosting
+- [] CLI encryption + JWT
+- [] Stripe for payments
+- [] Twilio integration for alerts
+        - Send SMS
+        - Make calls 
+- [] Email via SendGrid
+- [] User alert preferences
+- [] Public launch
+
  # TODOs for monitor-txt
 
+- [ ] implement the breaking change v1.0.0
 - [ ] Add file/line trace support for external projects
 - [ ] Improve threshold-based logging
 - [ ] Add unit tests for CLI config generator
 - [ ] Document advanced alert options (SMS/call)
-
-Nice-to-have:
-- [ ] Create web dashboard MVP
-- [ ] Vs Code Extenstion for Config Generation
