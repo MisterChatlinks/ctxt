@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "bin": {
-    "mtxt": "./src-cli/index.ts"
+    "create-monitext": "./src/new-cli/index.ts"
   },
   "exports": {
     "import": "./dist/index.mjs",
