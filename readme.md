@@ -2,89 +2,119 @@
 
 ## 🚀 Concept
 
-**`mtxt`**, short for **`monitor-txt`**, is a lightweight logging utility designed for **live log monitoring**. Its main goal is to **prevent silent failures** often encountered in web or backend apps, by **redirecting your logs to our API**, where you can view them in real time.
+**`mtxt | monitext`**, short for **Monitor-TXT**, is a lightweight, developer-friendly logging utility built for **real-time log monitoring**.
+
+Its primary mission is to **eliminate silent failures** in web or backend applications by **forwarding your logs to our API**, where you can monitor them live.
 
 ---
 
 ## 📦 Installation
 
-> **Note:** The package is currently in **beta**.
+> **Note:** `Monitor-TXT` is currently in **beta**.
 
 ```bash
 npm install monitor-txt@beta
 ```
 
-After installation, you must initialize the monitor:
+After installation, initialize the runtime by running:
 
 ```bash
-mtxt init
+monitext
 ```
 
-To keep your configuration in sync (especially if you edit it manually), start the watcher:
+This command generates a file named `monitext.runtime.(js|cjs|ts)` at the root of your project. It exports a pre-configured instance of our logging utility (`mtxt`, `monitext`).
 
-```bash
-mtxt -watch
+It will also attempt to auto-configure a path alias (`#monitext-runtime`) in:
+
+* `package.json`
+* `tsconfig.json`
+* `deno.json`
+
+---
+
+## 🛠️ Importing
+
+Compatible with **ESM**, **CommonJS**, and **TypeScript**.
+
+### ESM / TypeScript
+
+```ts
+import { mtxt, monitext } from "#monitext-runtime";
+```
+
+### CommonJS
+
+```js
+const { mtxt, monitext } = require("#monitext-runtime");
 ```
 
 ---
 
-## 🛠️ Usage
+## ✍️ Usage
 
-Compatible with both **ESM** and **CommonJS**:
-
-```ts
-// ESM
-import mtxt from "monitor-txt";
-```
-
-```js
-// CommonJS
-const mtxt = require("monitor-txt").default;
-```
-
-Then simply use:
+`mtxt` is the **compact, inline** version — ideal for quick calls.
 
 ```ts
-mtxt.log({ send: "Your message here" });
+mtxt
+  .info("Your message here", { yourMetaData: someInfo() }, { silent: false })
+  .send(); // Sends to the remote API
+```
+
+`monitext` is the **explicit, verbose** version — ideal for clarity and log hygiene.
+
+```ts
+monitext
+  .error("First error line", "Another line", "More info if needed")
+  .withMeta({ yourMetaData })
+  .config({ silent: true }) // Silences console output
+  .send();
 ```
 
 ---
 
 ## ⚙️ Configuration: `mtxt-config.ts`
 
-After running `mtxt init`, a config file is created at the root of your project:
+Once the runtime file is generated, you’ll find:
 
 ```ts
-const config = {
+export const { mtxt, monitext } = defineMonitextRuntime({
   project_name: "<YOUR_PROJECT_NAME>",
-  env: "node", // or 'web' in future updates
-  handleException: true,
-  handleRejection: true,
-  include: ["src/*"], // Only applies to Node/runtime environments
-  devMode: true,      // Set to false in production
+  env: "node", // or "web"
+  devMode: false,
   apiKey: "<YOUR_API_KEY>"
-};
-
-export default config;
+});
 ```
 
-> **Note:** When `devMode` is true, logs stay local. Set it to `false` to start forwarding them to the API.
+> 🧪 **devMode: `true`** keeps logs local (for debugging).
+> 🔄 Set to `false` to start forwarding logs to the Monitor-TXT API.
 
 ---
 
 ## 🔍 How It Works
 
-* All methods on the `mtxt` object are **asynchronous**, ensuring they don’t block or interfere with your app’s flow.
-* `mtxt init` creates a base config at your project root.
-* `mtxt -watch` watches for changes to your config and **rebuilds** the logger accordingly.
-* When you `import mtxt from "monitor-txt"`, you're importing a **custom-built instance** configured with your local project settings.
+* All log methods are **async**. Logs are **batched and sent in the background**.
+* Logs are **end-to-end encrypted** and sent over **HTTPS**.
+* Running `monitext` sets up a **custom runtime file**, tailored to your project.
+* Importing from `#monitext-runtime` gives you a **ready-to-use, preconfigured instance**.
+
+---
+
+## 🧠 Why Use It?
+
+* Prevent silent failures
+* Gain real-time visibility
+* Make logs part of your dev workflow, not an afterthought
+* Easily toggle between local/dev and production mode
 
 ---
 
 ## 💬 Final Notes
 
-Thanks for checking out **Monitor-TXT**.
+Thanks for checking out **Monitor-TXT**!
 
-You can contribute to the project or report issues at:
+📢 **Contribute, raise issues, or follow development at:**
+
 👉 [https://github.com/MisterChatlinks/monitor-txt](https://github.com/MisterChatlinks/monitor-txt)
-→ Look for the `dev` branch for active development.
+
+> Development happens on the `dev` branch – feel free to open PRs or start discussions.
+
