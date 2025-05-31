@@ -1,15 +1,40 @@
 /**
- * @purpose  utility function meant to allow stack look up at a given index
- * @param { Number } at - the index from of with to return the stack info
+ * Utility to inspect the call stack at a given depth.
  *
- * @note
- *  - at 1: bring back where the lookUpInStack function is called
+ * @function lookUpInStack
+ * @param {number} [at] - The stack depth to inspect. Defaults to `undefined`, which returns the full trace.
  *
- * In Synchonous func : `
- *  - at 2: where it's parent is called
+ * @returns {Object} Stack information:
+ * - `callerName` {string}: The name of the calling function, if found.
+ * - `fileName` {string}: The path or file where the call occurred (without line/column).
+ * - `lineNumber` {string | undefined}: The line number of the call.
+ * - `columnNumber` {string | undefined}: The column number of the call.
+ * - `fullTrace` {string[]}: The entire call stack trace (excluding the current function).
  *
- * In Async func
- * - at 7: where it's parent is called
+ * @description
+ * In a **synchronous context**, use:
+ * - `at: 1` → returns where `lookUpInStack` itself was called.
+ * - `at: 2` → returns the parent of the caller.
+ *
+ * In an **asynchronous context**, stack depth may vary. For example:
+ * - `at: 7` → often corresponds to the actual parent call site.
+ *
+ * @example
+ * 1 function caller() {
+ * 2   return lookUpInStack(2);
+ * 3 }
+ * 4
+ * 5 (function testCaller(){
+ * 6    caller()
+ * 7 })()
+ * 8 
+ * 9  // Output: {
+ * 10 //   callerName: 'testCaller',
+ * 11 //   fileName: '/path/to/file.js',
+ * 12 //   lineNumber: '6',
+ * 13 //   columnNumber: '5',
+ * 14 //   fullTrace: [...]
+ * 15 // }
  */
 export function lookUpInStack(at?: number) {
     let anchor: string[] = Error()
@@ -37,7 +62,7 @@ export function lookUpInStack(at?: number) {
    
     const callerName = part.length > 1 
         ? part[0] 
-        : "<anonymousFunction>";
+        : "<TopLevel>";
 
     const fileName = part.length > 1 
         ? part.slice(1).join("") 

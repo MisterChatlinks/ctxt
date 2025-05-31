@@ -1,5 +1,5 @@
 import { cwd } from "process";
-import { getCallerInfo, lockUpInStack } from "./utils";
+import { getCallerInfo, lockUpInStack } from "../src/utils/lookUpInStack";
 import { CTXTConfig } from "./config";
 
 
@@ -8,7 +8,7 @@ import {
     ctxtLogLevel,
     ctxtLogguer,
     ctxtRootConfig
-} from "../types/ctxt.type";
+} from "./types/ctxt.type";
 
 export default class ctxt {
     private static ConfigCache: ctxtRootConfig;

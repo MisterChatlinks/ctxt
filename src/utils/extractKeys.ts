@@ -12,7 +12,7 @@ export function extractKeys<T extends {}, U>(target: U, ...keys: (keyof U)[]) {
     for (const key in keys) {
         const current = keys[key]
         if (!target[current]) {
-            throw new Error(`[MT/extractKeys] key: ${current as string} does not exit on ${target}`)
+            throw new Error(`[MoniText/extractKeys] key: ${current as string} does not exit on ${target}`)
         }
         result[current as string] =
             (typeof target[current] === "function") ? target[current].bind(target) : target[current]
