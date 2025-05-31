@@ -16,8 +16,10 @@
 
  # TODOs for monitor-txt
 
-- [ ] implement the breaking change v1.0.0
-- [ ] Add file/line trace support for external projects
+- [] Update the readme.md
+- [] Finish the transport module of the package
+- [done] implement the breaking change v1.0.0
+- [done] Add file/line trace support for external projects
 - [ ] Improve threshold-based logging
 - [ ] Add unit tests for CLI config generator
 - [ ] Document advanced alert options (SMS/call)
