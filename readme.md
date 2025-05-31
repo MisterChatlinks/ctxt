@@ -1,4 +1,4 @@
-# 🖥️ Monitor-TXT (`mtxt`)
+# 🖥️ Monitor-TXT 
 
 ## 🚀 Concept
 
@@ -72,7 +72,7 @@ monitext
 
 ---
 
-## ⚙️ Configuration: `mtxt-config.ts`
+## ⚙️ Configuration: `monitext.runtime.ts`
 
 Once the runtime file is generated, you’ll find:
 
