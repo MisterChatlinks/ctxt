@@ -1,42 +1,44 @@
 {
-  "name": "monitor-txt",
-  "version": "1.0.0",
-  "description": "console utility for live monitoring",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "bin": {
-    "create-monitext": "./src/new-cli/index.ts"
-  },
-  "exports": {
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.js"
-  },
-  "keywords": [
-    "console",
-    "logger",
-    "structured-logging",
-    "monitoring"
-  ],
-  "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts"
-  },
-  "types": "./dist/index.d.ts",
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "@types/node": "^22.15.2",
-    "inquirer": "^12.6.0",
-    "json-format": "^1.0.1",
-    "openpgp": "^6.1.1",
-    "typescript": "^5.8.3"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/MisterChatlinks/monitor-txt.git"
-  },
-  "devDependencies": {     
-    "ts-node": "^10.9.2",
-    "tsup": "^8.5.0",
-    "vitest": "^3.1.2"
-  }
+   "name": "monitor-txt",
+   "version": "1.0.0",
+   "description": "console utility for live monitoring",
+   "type": "module",
+   "exports": {
+      "import": {
+         "types": "./lib/src/index.d.ts",
+         "default": "./lib/src/index.js"
+      },
+      "require": {
+         "types": "./lib/src/index.d.cts",
+         "default": "./lib/src/index.cjs"
+      }
+   },
+   "bin": {
+      "monitext": "./lib/cli/index.js"
+   },
+   "keywords": [
+      "console",
+      "logger",
+      "structured-logging",
+      "monitoring"
+   ],
+   "scripts": {
+      "build": "tsup src/index.ts --format esm,cjs --dts --outDir ./lib/src && tsup src-cli/index.ts --format esm --outDir ./lib/cli"
+   },
+   "author": "",
+   "license": "MIT",
+   "dependencies": {
+      "inquirer": "^12.6.0",
+      "openpgp": "^6.1.1"
+   },
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/MisterChatlinks/monitor-txt.git"
+   },
+   "devDependencies": {
+      "@types/node": "^22.15.2",
+      "ts-node": "^10.9.2",
+      "tsup": "^8.5.0",
+      "vitest": "^3.1.2"
+   }
 }
