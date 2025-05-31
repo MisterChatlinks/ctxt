@@ -1,13 +1,21 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "NodeNext",
-    "target": "ESNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "dist",
-    "esModuleInterop": true,
-  }
+   "compilerOptions": {
+      "target": "ES2017",
+      "module": "ES2022",
+      "moduleResolution": "node",
+      "strict": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "outDir": "lib",
+      "declaration": true,
+      "declarationMap": true,
+      "emitDeclarationOnly": false,
+      "skipLibCheck": true,
+      "skipDefaultLibCheck": true,
+      "rewriteRelativeImportExtensions": true
+   },
+   "include": [
+      "src/**/*.ts",
+      "src-cli/**/*.ts"
+   ]
 }

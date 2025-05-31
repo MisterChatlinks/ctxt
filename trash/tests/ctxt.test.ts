@@ -1,4 +1,4 @@
-import  ctxt from "../src/index"
+import  ctxt from "../trash/index"
 
 ctxt.log({ send : "new transaction" })
 

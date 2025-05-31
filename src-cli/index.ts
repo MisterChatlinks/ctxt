@@ -1,22 +1,14 @@
-#!/usr/bin/env ts-node
-import { initCtxt } from "./initer";
-import { buildCtxt } from "./builder";
-import { watchConfig } from "./watcher";
-import { join } from "path";
+#!/usr/bin/env node
+
 import { cwd } from "process";
-import { devMTXTConfigPathRef, mtxtIsInDevellopement, userConfigFileName } from "./devVar";
+import { inquireMonitextRuntime } from "./inquire";
+import { writeMonitextRuntime } from "./write";
 
-const command = process.argv.slice(2);
-const outPath = command.includes(mtxtIsInDevellopement) 
-            ? join(devMTXTConfigPathRef)
-            : join(cwd(), userConfigFileName);
+const path = cwd();
 
-(async()=>{ 
-    if(command.includes("init")){
-        await initCtxt(outPath)    
-        buildCtxt(outPath)
-    } 
-    if(command.includes("-watch")){
-        watchConfig(outPath)
-    }
+(async ()=>{
+    const config = await inquireMonitextRuntime();
+    const param = { ...config };
+    delete param["flavor"];
+    writeMonitextRuntime(path, param, config.flavor)
 })()

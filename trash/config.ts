@@ -1,4 +1,4 @@
-import { ctxtLogLevel, ctxtRootConfig } from "../types/ctxt.type";
+import { ctxtLogLevel, ctxtRootConfig } from "./types/ctxt.type";
 
 class CTXTConfigObj implements ctxtRootConfig {
     "apiKey" : null | string = null
