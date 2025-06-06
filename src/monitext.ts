@@ -1,4 +1,4 @@
-import {LogLevel, VerboseLogFn, CompactLogFn, MetaType, logConfig } from "../src-types/monitext.types"
+import { LogLevel, VerboseLogFn, CompactLogFn, CompactArgs, CompactLogger, logConfig, VerboseLogger, DefLoggerFn } from "../src-types/monitext.types"
 import { lookUpInStack } from "./utils/lookUpInStack";
 import { MTLogguer } from "./logguer";
 
@@ -45,6 +45,11 @@ export class MoniText {
     public fatal: ReturnType<typeof this.mkPrinter>;
 
     /**
+     * Allow to define custom log instance
+    */
+    public defLogguer: DefLoggerFn;
+
+    /**
      * Available log levels supported by MoniText.
      * Can be used to validate or iterate log levels.
      */
@@ -63,6 +68,18 @@ export class MoniText {
         this.warn = this.mkPrinter("warn", mode);
         this.error = this.mkPrinter("error", mode);
         this.fatal = this.mkPrinter("fatal", mode);
+
+        this.defLogguer = (identifyer, config = {}) => {
+            if (typeof config != "object") {
+                throw new Error(
+                    `[MoniTexT.defLogguer] expecting an object as pre-config`
+                )
+            }
+            const logguer = this.mkLoggerDefinition(mode);
+            logguer.__meta_data__.config = config;
+            logguer.__meta_data__.identifyer = identifyer;
+            return logguer as unknown as (CompactLogger | VerboseLogger);
+        }
     }
 
     /**
@@ -74,7 +91,7 @@ export class MoniText {
      * @returns A structured VerboseLogObject
      * @private
      */
-    private print(lvl: LogLevel, stmt: unknown[], callInfo: Record<string, unknown>) {
+    private print(lvl: LogLevel, stmt: unknown[], callInfo: ReturnType<typeof lookUpInStack>) {
         return new MTLogguer().log(lvl, stmt, callInfo);
     }
 
@@ -103,13 +120,49 @@ export class MoniText {
                 return self.print(level, stmt, lookUpInStack(2));
             };
         } else {
-            return function (log: string, meta?: MetaType, conf?: logConfig) {
+            return function (log: string, param?: CompactArgs) {
                 const MTLogguer = self.print(level, [log], lookUpInStack(2));
-                if (meta) MTLogguer.withMeta(meta);
-                if (conf) MTLogguer.config(conf);
-                return { send: MTLogguer.send.bind(MTLogguer) };
+                if (param?.meta) MTLogguer.withMeta(param?.meta);
+                if (param?.conf) MTLogguer.config(param?.conf);
+                MTLogguer.send();
             };
         }
+    }
+
+    private mkLoggerDefinition(mode: "verbose" | "shorthand") {
+        const self = this;
+        const logguer = { __meta_data__: { identifyer: "", config: {} } } 
+
+        function defVerboseMethod(m: LogLevel) {
+            return function (...stmt: unknown[]) {
+                const log = self.print(m, [`[${logguer.__meta_data__.identifyer as string }]`, ...stmt], lookUpInStack(2));
+                      log.config(logguer.__meta_data__.config);
+                return log;
+            }
+        }
+        function defCompactMethod(m: LogLevel){
+            return function (stmt: string, param?: CompactArgs) {
+                const log = self.print(m, [`[${logguer.__meta_data__.identifyer}] ${stmt}`], lookUpInStack(2));
+                log.config({ ...logguer.__meta_data__.config, ...(param?.conf || {}) });
+                log.withMeta({ ...(param?.meta || {}) });
+                log.send()
+            }
+        }
+
+        if (mode == "verbose") {
+            for(const key in MoniText.Levels){
+                //@ts-ignore
+                //!!!TODO Correct the typing to remove the ts-ignore
+                logguer[MoniText.Levels[key]] = defVerboseMethod(MoniText.Levels[key]);
+            }
+        } else{
+            for(const key in MoniText.Levels){
+                //@ts-ignore 
+                logguer[MoniText.Levels[key]] = defCompactMethod(MoniText.Levels[key]);
+            }
+        }
+
+        return logguer
     }
 }
 
