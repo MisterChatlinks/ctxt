@@ -2,7 +2,7 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import { injectPathAliasIfPossible } from "./alias";
 import { jsonFormat } from "../src/utils/jsonFormat";
-import { PackageName, RuntimeFileName } from "./devVar";
+import { PackageName, RuntimeFileName } from "../var";
 
 export function writeMonitextRuntime(at: string, config: Record<string, unknown>, type: ".js" | ".ts" | ".cjs") {
     const inputConf = jsonFormat(config);
