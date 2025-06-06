@@ -1,9 +1,10 @@
 # TODOs for Monitext Website
 
-- [] Codux UI
-- [] Backend logic (MERISE)
+- [half] Codux UI
+- [half] Backend logic (MERISE)
 - [] Backend integration
-- [] DB design & hosting
+- [] DB design
+- [done] Find a serverless hosting provider
 - [] Frontend + backend hosting
 - [] CLI encryption + JWT
 - [] Stripe for payments
@@ -16,10 +17,12 @@
 
  # TODOs for monitor-txt
 
-- [] Update the readme.md
+- [done] Update the readme.md
 - [] Finish the transport module of the package
 - [done] implement the breaking change v1.0.0
 - [done] Add file/line trace support for external projects
 - [ ] Improve threshold-based logging
 - [ ] Add unit tests for CLI config generator
+- [done] Add unit tests for PKG
+
 - [ ] Document advanced alert options (SMS/call)
