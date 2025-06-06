@@ -1,6 +1,7 @@
 import { MoniTextScheduler } from "./scheduler";
 import { VerboseLogObject, LogLevel, scheduleEntrie, logConfig } from "../src-types/monitext.types";
 import { extractKeys } from "./utils/extractKeys";
+import { lookUpInStack } from "./utils/lookUpInStack";
 
 /**
  * Interface for creating and chaining log events using MoniText.
@@ -20,7 +21,7 @@ export class MTLogguer {
      * @param {Record<string, unknown>} metaData - Metadata to be attached to the log.
      * @returns {Pick<MTLogguer, "config" | "send" | "withMeta">}
      */
-    public log(lvl: LogLevel, statemens: unknown[], metaData: Record<string, unknown>) {
+    public log(lvl: LogLevel, statemens: unknown[], metaCallInfo: ReturnType<typeof lookUpInStack>) {
 
         MoniTextScheduler.scheduleLog({
             "content": statemens,
@@ -28,7 +29,7 @@ export class MTLogguer {
             "ref": this.ref,
             "meta": {
                 "time": new Date().toISOString(),
-                ...metaData
+                ...metaCallInfo
             }
         })
 
@@ -53,7 +54,7 @@ export class MTLogguer {
      * @param {scheduleEntrie["meta"]} metaData - Metadata key-value pairs.
      * @returns {Pick<MTLogguer, "send" | "config">}
      */
-    public withMeta(metaData: scheduleEntrie["meta"]) {
+    public withMeta(metaData: scheduleEntrie["meta:content"]) {
         MoniTextScheduler.addMetaDataToLog(this.ref, metaData);
         return extractKeys<{
             send: MTLogguer["send"],
