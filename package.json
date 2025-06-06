@@ -23,7 +23,7 @@
       "monitoring"
    ],
    "scripts": {
-      "build": "tsup src/index.ts --format esm,cjs --dts --outDir ./lib/src && tsup src-cli/index.ts --format esm --outDir ./lib/cli"
+      "build": "vitest --run && tsup src/index.ts --format esm,cjs --dts --outDir ./lib/src && tsup src-cli/index.ts --format esm --outDir ./lib/cli"
    },
    "author": "",
    "license": "MIT",
