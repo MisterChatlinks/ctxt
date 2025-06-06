@@ -1,4 +1,6 @@
-import { MTLogguer } from "../src/logguer"
+import type { MTLogguer } from "../src/logguer"
+import type { lookUpInStack } from "../src/utils/lookUpInStack"
+import { loggingFormat } from "./formater.types"
 
 export type LogLevel = 
     | "info"
@@ -11,9 +13,9 @@ export type scheduleEntrie = {
     content: unknown[],    
     config?: logConfig
     level: LogLevel,
-    meta: Record<string, number | string | boolean | null | undefined>
+    meta: ReturnType<typeof lookUpInStack> & Record<string, unknown>
     ref: symbol
-    "meta:content"?: Record<string, number | string | boolean | null | undefined>
+    "meta:content"?: Record<string, unknown>
 }
 
 type alertOption = "sms" | "call" | "mail"
@@ -23,14 +25,17 @@ export type logConfig = {
     silent?: boolean,
     class?: string,
     use?: alertOption[],
+    send?: boolean,
+    flag?: string[]
 }
 
 export interface MTConf {
-    env: "node" | "web"
+    env: "node" | "web" | "deno"
     apiKey: string,
     devMode: boolean,
-    silent: LogLevel[],
+    silent: (LogLevel)[],
     project_name: string,
+    format: loggingFormat
 }
 
 export type VerboseLogObject = {
@@ -43,18 +48,51 @@ export type MetaType = scheduleEntrie["meta:content"]
 
 export type VerboseLogFn = (...stmt: unknown[]) => VerboseLogObject;
 
-export type CompactLogFn = (log: string, meta?: MetaType, conf?: logConfig) => { send: () => void };
+export type CompactArgs = {meta?: MetaType, conf?: logConfig };
 
-export interface VerboseLogger {
+export type CompactLogFn = (log: string, param?: CompactArgs) => void;
+
+
+export interface VerboseLogger  {
     info: VerboseLogFn;
     error: VerboseLogFn;
     warn: VerboseLogFn;
     success: VerboseLogFn;
-}
+    fatal: VerboseLogFn;
+    defLogguer: DefVerboseLogguerFn;
+} 
 
 export interface CompactLogger {
     info: CompactLogFn;
     error: CompactLogFn;
     warn: CompactLogFn;
     success: CompactLogFn;
+    fatal: CompactLogFn;
+    defLogguer: DefCompactLogguerFn;
+}
+
+/**
+ * There's a duplicate entry of ...Logguer / ...LogDef cause TS do not quite well compile expression like (ThisType & ThatType) to simple javascript
+*/
+
+export type DefLoggerFn = (identifyer: string, config?: logConfig) => (CompactLogDef | VerboseLogDef);
+
+export type DefCompactLogguerFn = (identifyer: string, config?: logConfig) => CompactLogDef;
+
+export type DefVerboseLogguerFn = (identifyer: string, config?: logConfig) => VerboseLogDef;
+
+export interface CompactLogDef {
+    info: CompactLogFn;
+    error: CompactLogFn;
+    warn: CompactLogFn;
+    success: CompactLogFn;
+    fatal: CompactLogFn;
+}
+
+export interface VerboseLogDef {
+    info: VerboseLogFn;
+    error: VerboseLogFn;
+    warn: VerboseLogFn;
+    success: VerboseLogFn;
+    fatal: VerboseLogFn;
 }
