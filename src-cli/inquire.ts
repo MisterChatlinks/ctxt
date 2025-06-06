@@ -1,5 +1,7 @@
 import inquirer from "inquirer";
 import { MTConf } from "../src-types/monitext.types";
+import { defaultApiKeyPlaceholder, defaultProjectNamePlaceholder } from "../var";
+import { loggingFormat } from "../src-types/formater.types";
 
 interface prompt {
     name: keyof MTConf
@@ -9,7 +11,7 @@ interface promptBody {
     message: string,
     type: "input" | "list" | "confirm"
     default?: (number | string | boolean)
-    choices?: (number | string | boolean)[]
+    choices?: (number | string | boolean| { name: string, value: loggingFormat })[]
 }
 
 function mkPrompt(name: keyof MTConf, param: promptBody) {
@@ -33,16 +35,27 @@ export async function inquireMonitextRuntime() {
         mkPrompt("project_name", {
             message: "What is your project name?",
             type: "input",
+            default: defaultProjectNamePlaceholder
         }),
         mkPrompt("apiKey", {
             message: "Enter your API key (or leave blank to input it later):",
             type: "input",
-            default: "",
+            default: defaultApiKeyPlaceholder,
         }),
         mkPrompt("env", {
             message: "In which environment are you running Monitext?",
             type: "list",
-            choices: ["server", "browser", "node"],
+            choices: ["web", "node", "deno"] as MTConf["env"][],
+        }),
+        mkPrompt("format", {
+            message: `Which logging format do you want (recommended: "dev")?`,
+            type: "list",
+            choices: [
+                { name: 'dev - readable output for humans (default)', value: 'dev' },
+                { name: 'json - structured data for parsing', value: 'json' },
+                { name: 'compact - short single-line logs', value: 'compact' }
+            ] as const,
+            default: "dev"
         }),
         mkPrompt("devMode", {
             message: "Activate Dev Mode (logs won't be sent to API)?",
