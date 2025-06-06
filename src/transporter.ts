@@ -14,7 +14,7 @@ export class MoniTextTransporter {
     private static nextTansportationSchedule: null | NodeJS.Timeout
 
     public static async scheduleTransportation(log: scheduleEntrie) {
-
+        
         this.batch.push(log);
 
         if (this.nextTansportationSchedule === null) return;
