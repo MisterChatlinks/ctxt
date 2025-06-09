@@ -16,6 +16,7 @@
    },
    "include": [
       "src/**/*.ts",
-      "src-cli/**/*.ts"
-, "var.ts"   ]
+      "src-cli/**/*.ts",
+      "var.ts"
+   ]
 }
