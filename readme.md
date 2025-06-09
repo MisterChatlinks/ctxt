@@ -1,4 +1,4 @@
-# 🖥️ Monitor-TXT 
+# 🖥️ Monitor-TXT
 
 ## 🚀 Concept
 
@@ -56,8 +56,7 @@ const { mtxt, monitext } = require("#monitext-runtime");
 
 ```ts
 mtxt
-  .info("Your message here", { yourMetaData: someInfo() }, { silent: false })
-  .send(); // Sends to the remote API
+  .info("Your message here", { yourMetaData: someInfo() }, { silent: false }) // Automatically loggued & sent to the remote API
 ```
 
 `monitext` is the **explicit, verbose** version — ideal for clarity and log hygiene.
@@ -67,7 +66,7 @@ monitext
   .error("First error line", "Another line", "More info if needed")
   .withMeta({ yourMetaData })
   .config({ silent: true }) // Silences console output
-  .send();
+  .send(); // Manualy loggued & sent to remote Api
 ```
 
 ---
