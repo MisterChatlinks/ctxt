@@ -1,8 +1,8 @@
-# 🖥️ Monitor-TXT
+# 🖥️ Monitor-TXT 
 
 ## 🚀 Concept
 
-**`mtxt | monitext`**, short for **Monitor-TXT**, is a lightweight, developer-friendly logging utility built for **real-time log monitoring**.
+**`mtxt | monitext`**, short for **Monitor-TXT**, is a developer-friendly logging utility built for **real-time log monitoring**. It provides structured, configurable, and encrypted logging for large-scale projects and advanced monitoring needs.
 
 Its primary mission is to **eliminate silent failures** in web or backend applications by **forwarding your logs to our API**, where you can monitor them live.
 
@@ -11,6 +11,8 @@ Its primary mission is to **eliminate silent failures** in web or backend applic
 ## 📦 Installation
 
 > **Note:** `Monitor-TXT` is currently in **beta**.
+
+Install the package via npm:
 
 ```bash
 npm install monitor-txt@beta
@@ -52,13 +54,14 @@ const { mtxt, monitext } = require("#monitext-runtime");
 
 ## ✍️ Usage
 
+### Compact Logging (`mtxt`)
 `mtxt` is the **compact, inline** version — ideal for quick calls.
 
 ```ts
-mtxt
-  .info("Your message here", { yourMetaData: someInfo() }, { silent: false }) // Automatically loggued & sent to the remote API
+mtxt.info("Your message here", { yourMetaData: someInfo() }, { silent: false });
 ```
 
+### Verbose Logging (`monitext`)
 `monitext` is the **explicit, verbose** version — ideal for clarity and log hygiene.
 
 ```ts
@@ -66,7 +69,7 @@ monitext
   .error("First error line", "Another line", "More info if needed")
   .withMeta({ yourMetaData })
   .config({ silent: true }) // Silences console output
-  .send(); // Manualy loggued & sent to remote Api
+  .send();
 ```
 
 ---
@@ -80,30 +83,97 @@ export const { mtxt, monitext } = defineMonitextRuntime({
   project_name: "<YOUR_PROJECT_NAME>",
   env: "node", // or "web"
   devMode: false,
-  apiKey: "<YOUR_API_KEY>"
+  apiKey: "<YOUR_API_KEY>",
+  format: "dev", // Options: "dev", "json", "compact"
+  silent: [] // Silence specific log levels globally
 });
 ```
 
-> 🧪 **devMode: `true`** keeps logs local (for debugging).
-> 🔄 Set to `false` to start forwarding logs to the Monitor-TXT API.
+### Key Configuration Options:
+- **`project_name`**: Name of your project.
+- **`env`**: Environment where the library is running (`node`, `web`, or `deno`).
+- **`devMode`**: If `true`, logs are kept local for debugging. If `false`, logs are forwarded to the API.
+- **`apiKey`**: Your API key for authentication.
+- **`format`**: Logging format (`dev`, `json`, or `compact`).
+- **`silent`**: Array of log levels to silence globally (e.g., `["info", "success"]`).
 
 ---
 
 ## 🔍 How It Works
 
-* All log methods are **async**. Logs are **batched and sent in the background**.
-* Logs are **end-to-end encrypted** and sent over **HTTPS**.
-* Running `monitext` sets up a **custom runtime file**, tailored to your project.
-* Importing from `#monitext-runtime` gives you a **ready-to-use, preconfigured instance**.
+### Logging Levels
+The library supports the following log levels:
+- **`info`**: General information.
+- **`success`**: Successful operations.
+- **`warn`**: Warnings that require attention.
+- **`error`**: Errors that need debugging.
+- **`fatal`**: Critical errors that may crash the application.
+
+### Features
+- **Async Logging**: Logs are batched and sent in the background.
+- **End-to-End Encryption**: Logs are encrypted using OpenPGP before being sent to the API.
+- **Custom Runtime**: Running `monitext` sets up a runtime file tailored to your project.
+- **Preconfigured Instances**: Importing from `#monitext-runtime` gives you ready-to-use logging interfaces.
 
 ---
 
 ## 🧠 Why Use It?
 
-* Prevent silent failures
-* Gain real-time visibility
-* Make logs part of your dev workflow, not an afterthought
-* Easily toggle between local/dev and production mode
+- **Prevent Silent Failures**: Ensure all critical logs are captured and monitored.
+- **Real-Time Visibility**: Monitor logs live via the API.
+- **Structured Logging**: Use metadata and configurations to enrich logs.
+- **Flexible Formats**: Choose between human-readable (`dev`), structured (`json`), or compact (`compact`) formats.
+- **Advanced Monitoring**: Configure silent modes, thresholds, and alert options.
+
+---
+
+## 🛡️ Security
+
+- Logs are encrypted using OpenPGP before being sent to the API.
+- Transport is handled over HTTPS with authentication via API keys.
+
+---
+
+## 📖 Advanced Features
+
+### Preconfigured Loggers
+You can define preconfigured loggers for specific use cases:
+
+#### Verbose Logger
+```ts
+const verboseLogger = monitext.defLogguer("VerboseLogger", { silent: true });
+verboseLogger.info("This won't log due to silent mode").send();
+verboseLogger.error("Critical error").config({ silent: false }).send();
+```
+
+#### Compact Logger
+```ts
+const compactLogger = mtxt.defLogguer("CompactLogger", { silent: true });
+compactLogger.info("This won't log due to silent mode");
+compactLogger.success("Operation successful", { conf: { silent: false } });
+```
+
+### Silent Mode
+- Silence logs globally by level:
+```ts
+defineMonitextRuntime({
+  silent: ["info", "success"]
+});
+```
+- Silence individual logs:
+```ts
+mtxt.error("This won't log", { conf: { silent: true } });
+monitext.warn("This won't log").config({ silent: true }).send();
+```
+
+---
+
+## 🧪 Testing
+
+Unit tests are included to validate the functionality of the library. Run tests using:
+```bash
+npm run build
+```
 
 ---
 
