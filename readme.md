@@ -85,7 +85,13 @@ export const { mtxt, monitext } = defineMonitextRuntime({
   devMode: false,
   apiKey: "<YOUR_API_KEY>",
   format: "dev", // Options: "dev", "json", "compact"
-  silent: [] // Silence specific log levels globally
+  silent: [], // Silence specific log levels globally
+  transportationDelay: 1000, // Delay in ms for batching logs
+  backOffDelay: 500, // Initial backoff delay in ms for retries
+  fallbackFilePath: "./error-logs.txt", // File path for fallback storage
+  fallback: (logs) => {
+    console.error("Custom fallback handler:", logs);
+  },
 });
 ```
 
@@ -96,6 +102,10 @@ export const { mtxt, monitext } = defineMonitextRuntime({
 - **`apiKey`**: Your API key for authentication.
 - **`format`**: Logging format (`dev`, `json`, or `compact`).
 - **`silent`**: Array of log levels to silence globally (e.g., `["info", "success"]`).
+- **`transportationDelay`**: Delay in milliseconds for batching logs before sending them.
+- **`backOffDelay`**: Initial delay in milliseconds for exponential backoff during retries.
+- **`fallbackFilePath`**: File path for storing logs locally in case of API failure (Node.js/Deno only).
+- **`fallback`**: Custom fallback function to handle logs when the API is unreachable.
 
 ---
 
@@ -111,6 +121,8 @@ The library supports the following log levels:
 
 ### Features
 - **Async Logging**: Logs are batched and sent in the background.
+- **Retry Logic**: Logs are retried with exponential backoff if the API is unreachable.
+- **Fallback Mechanisms**: Logs are stored locally (Node.js/Deno) or in browser storage (LocalStorage/IndexedDB) if retries fail.
 - **End-to-End Encryption**: Logs are encrypted using OpenPGP before being sent to the API.
 - **Custom Runtime**: Running `monitext` sets up a runtime file tailored to your project.
 - **Preconfigured Instances**: Importing from `#monitext-runtime` gives you ready-to-use logging interfaces.
@@ -172,8 +184,18 @@ monitext.warn("This won't log").config({ silent: true }).send();
 
 Unit tests are included to validate the functionality of the library. Run tests using:
 ```bash
-npm run build
+npm run test
 ```
+
+### Key Test Cases:
+1. **API Transport**:
+   - Verifies that logs are sent to the API with the correct payload and headers.
+2. **Retry Logic**:
+   - Ensures logs are retried with exponential backoff when the API is unreachable.
+3. **Fallback Mechanism**:
+   - Tests that logs are handled by the fallback function or stored locally when retries fail.
+4. **Batching**:
+   - Confirms that logs are batched and sent together for efficiency.
 
 ---
 
