@@ -32,10 +32,17 @@ export type logConfig = {
 export interface MTConf {
     env: "node" | "web" | "deno"
     apiKey: string,
+    apiUrl?: string, // Optional API endpoint
+    encryptPayload?: (payload: string, apiKey: string) => string | Promise<string>, // Enable/disable encryption
     devMode: boolean,
     silent: (LogLevel)[],
     project_name: string,
     format: loggingFormat
+    fallback?: ((logs: scheduleEntrie[]) => void | unknown) | null,
+    fallbackFilePath?: string
+    useDefaultFallback?: boolean
+    transportationDelay?: number
+    backOffDelay?: number
 }
 
 export type VerboseLogObject = {

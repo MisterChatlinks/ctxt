@@ -136,7 +136,7 @@ export class MoniTextScheduler {
         if (this.config?.apiKey
             && this.config.apiKey != ""
             && this.config.apiKey != defaultApiKeyPlaceholder
-            && this.config?.devMode === false
+            && (this.config?.devMode === false || this.config?.devMode === undefined)
             && (!log?.config?.send || !log?.config?.send === false)
         ) {
             MoniTextTransporter.scheduleTransportation(log);

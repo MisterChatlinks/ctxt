@@ -19,7 +19,9 @@ function overrideConsoleLog() {
     return logguer;
 }
 
-describe("Monitext", () => {
+describe("MonitextLogguer", () => {
+
+    beforeAll(() => restoreConsoleLog());
 
     it("Should be initializable with two flavor", () => {
         expectTypeOf(mtxt).toBeObject();
