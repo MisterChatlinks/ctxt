@@ -28,17 +28,18 @@
    "author": "",
    "license": "MIT",
    "dependencies": {
-      "inquirer": "^12.6.0",
-      "openpgp": "^6.1.1"
+      "crypto-js": "^4.2.0",
+      "inquirer": "^12.6.0"
    },
    "repository": {
       "type": "git",
       "url": "https://github.com/MisterChatlinks/monitor-txt.git"
    },
    "devDependencies": {
+      "@types/crypto-js": "^4.2.2",
       "@types/node": "^22.15.2",
       "ts-node": "^10.9.2",
-      "tsup": "^8.5.0",
+      "tsup": "^8.1.0",
       "vitest": "^3.1.2"
    }
 }

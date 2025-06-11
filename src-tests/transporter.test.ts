@@ -56,19 +56,19 @@ describe("MonitextRuntime", () => {
             "silent": [],
             "fallback": fallback,
             "useDefaultFallback": false,
-            "transportationDelay": 50, // 50ms for testing
-            "backOffDelay": 5 // 5ms second for testing
+            "transportationDelay": 10, // 10ms for testing
+            "backOffDelay": 1 // 1ms second for testing
         });
         
-        for(let i = 0; i < 5; i++) {
+        for(let i = 0; i < 6; i++) {
             mtxt.error(`test error ${i}`);
         }
 
-        // Wait for the logs to be processed, the backoff delay is set to 5ms even if it may seem too short it does in fact greatly delay the execution of the fallback function so that infinite loop cannot bloat the transporter logic.
+        // Wait for the logs to be processed, the backoff delay is set to 1ms even if it may seem too short it does in fact greatly delay the execution of the fallback function so that infinite loop cannot bloat the transporter logic.
         // It work in theory but suck in practice expectually for testing as it painfully slow down testing, because delay grown exponentienly with consecucitve fail.
         // It's not an error but a design flaw. the greater the delay the more time it take to test, so we set it to 5ms for testing purpose.
         
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
         expect(fallback).toHaveBeenCalledTimes(1);
         

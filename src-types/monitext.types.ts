@@ -29,11 +29,13 @@ export type logConfig = {
     flag?: string[]
 }
 
+export type encryptPayloadFn = (payload: string, apiKey: string) => { apiKey: string, payload: string } | Promise<{ apiKey: string, payload: string }>;
+
 export interface MTConf {
     env: "node" | "web" | "deno"
     apiKey: string,
     apiUrl?: string, // Optional API endpoint
-    encryptPayload?: (payload: string, apiKey: string) => string | Promise<string>, // Enable/disable encryption
+    encryptPayload?: encryptPayloadFn, // Enable/disable encryption
     devMode: boolean,
     silent: (LogLevel)[],
     project_name: string,
