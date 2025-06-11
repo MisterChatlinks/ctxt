@@ -7,6 +7,11 @@
 import type { MTConf } from "./src"
 import { encryptPayload } from "./src/utils/encrypt"
 
+import SHA256 from 'crypto-js/sha256';
+import { AES } from "crypto-js";
+
+const hash = SHA256("myApiKey").toString(); // hex string
+
 export const RuntimeFileName = "monitext.runtime"
 
 export const PackageName = "monitor-txt"
@@ -17,8 +22,15 @@ export const defaultProjectNamePlaceholder = "<YOUR_PROJECT_NAME>"
 
 export const defaultApiUrl = "https://monitext.onrender.com/api/logs"
 
-export async function defaultEncryptPayload(payload: string, apiKey: string){   
-    return  await encryptPayload(payload, apiKey)
+export async function defaultEncryptPayload(payload: string, apiKey: string) {
+    const ciphertext = AES.encrypt(payload, apiKey).toString();
+    return {
+        apiKey: SHA256(apiKey).toString(),
+        payload: JSON.stringify({ 
+            data: ciphertext,
+            magic: `MONITEXT-MAGIC ${SHA256(payload).toString()}` 
+        })
+    };
 };
 
 /**

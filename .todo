@@ -18,7 +18,7 @@
  # TODOs for monitor-txt
 
 - [done] Update the readme.md
-- [] Finish the transport module of the package
+- [done] Finish the transport module of the package
 - [done] implement the breaking change v1.0.0
 - [done] Add file/line trace support for external projects
 - [ ] Improve threshold-based logging
