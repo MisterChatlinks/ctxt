@@ -112,13 +112,27 @@ type logConfig = {
     send?: boolean;
     flag?: string[];
 };
+type encryptPayloadFn = (payload: string, apiKey: string) => {
+    apiKey: string;
+    payload: string;
+} | Promise<{
+    apiKey: string;
+    payload: string;
+}>;
 interface MTConf {
     env: "node" | "web" | "deno";
     apiKey: string;
+    apiUrl?: string;
+    encryptPayload?: encryptPayloadFn;
     devMode: boolean;
     silent: (LogLevel)[];
     project_name: string;
     format: loggingFormat;
+    fallback?: ((logs: scheduleEntrie[]) => void | unknown) | null;
+    fallbackFilePath?: string;
+    useDefaultFallback?: boolean;
+    transportationDelay?: number;
+    backOffDelay?: number;
 }
 type VerboseLogObject = {
     config: MTLogguer["config"];
@@ -255,6 +269,22 @@ declare class MoniText {
     private mkLoggerDefinition;
 }
 
+/**
+ * Defines the runtime configuration for Monitext by merging the provided configuration
+ * with the default configuration. This function validates the input and ensures that
+ * the configuration adheres to the expected structure.
+ *
+ * @param config - An optional configuration object to customize the Monitext runtime.
+ *                 If provided, it must be an object. The `fallback` property, if present,
+ *                 must be a function or `null`.
+ *
+ * @throws {Error} If the `config` parameter is not an object.
+ * @throws {Error} If the `fallback` property of the `config` is not a function or `null`.
+ *
+ * @returns An object containing two logger instances:
+ *          - `mtxt`: A compact logger instance for shorthand logging.
+ *          - `monitext`: A verbose logger instance for detailed logging.
+ */
 declare function defineMonitextRuntime(config?: MTConf): {
     mtxt: CompactLogger;
     monitext: VerboseLogger;
