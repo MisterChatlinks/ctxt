@@ -5,8 +5,6 @@
 */
 
 import type { MTConf } from "./src"
-import { encryptPayload } from "./src/utils/encrypt"
-
 import SHA256 from 'crypto-js/sha256';
 import { AES } from "crypto-js";
 

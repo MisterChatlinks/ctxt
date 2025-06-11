@@ -62,7 +62,7 @@ export function lookUpInStack(at?: number) {
    
     const callerName = part.length > 1 
         ? part[0] 
-        : "<TopLevel>";
+        : anchor.slice(1).length === 2 ? "<TopLevel>" : "<anonymousFn>";
 
     const fileName = part.length > 1 
         ? part.slice(1).join("") 
@@ -70,7 +70,7 @@ export function lookUpInStack(at?: number) {
 
     const lineNumber = fileName.split(":").at(-2);
 
-    const columnNumber = fileName.split(":").at(-1);
+    const columnNumber = (fileName.split(":").at(-1))?.replace(")", "");
 
     return {
         callerName,

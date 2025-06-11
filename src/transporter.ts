@@ -131,7 +131,7 @@ export class MoniTextTransporter {
             this.batch = []; // Clear the batch for the next round
             this.sendLogs(logsToSend);
             this.nextTansportationSchedule = null;
- 
+
         }, debounce); // Default to 60 seconds if not specified
     }
 
@@ -174,7 +174,7 @@ export class MoniTextTransporter {
         if (!apiUrl || !apiKey) {
             throw new Error('API URL or API Key is not defined in the configuration.');
         }
-        
+
         try {
             // Encrypt the payload if encryption is enabled
             const payload = JSON.stringify(logs);
@@ -182,21 +182,37 @@ export class MoniTextTransporter {
                 ? await this.config.encryptPayload(payload, apiKey)
                 : payload;
 
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`,
-                },
-                body: encryptedPayload,
-            });
+            let response: Response;
+
+            if (typeof encryptedPayload === 'object' && 'payload' in encryptedPayload) {
+                const { apiKey, payload } = encryptedPayload;
+
+                response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`,
+                    },
+                    body:  typeof payload  === "object" ? JSON.stringify(payload) : payload,
+                });
+            } 
+            else {
+                response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: payload,
+                });
+            }
 
             if (!response.ok) {
                 throw new Error(`API responded with status ${response.status}: ${response.statusText}`);
             }
 
             console.log(`[${this.name}] Logs successfully sent to API.`);
-        } catch (error) {
+        } 
+        catch (error) {
             console.error(`[${this.name}] Failed to send logs to API: ${(error as Error).message}`);
             throw error; // Re-throw the error to trigger retry logic
         }
