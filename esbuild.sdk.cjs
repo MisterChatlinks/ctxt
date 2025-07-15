@@ -13,8 +13,8 @@ const formats = [
   { format: "iife", ext: ".js" },
 ];
 
-const entry = "./src/index";
-const outdir = "./lib";
+const entry = "./src-sdk/index";
+const outdir = "./lib/sdk";
 const target = "es2015";
 const platform = "neutral";
 const tsconfig = "./tsconfig.json";
@@ -76,7 +76,7 @@ async function runBuild({ format, ext }, options, suffix) {
 
   console.log("🧹 Post-Build: Cleaning intermediate types...");
   rmSync("./lib/types", { recursive: true, force: true });
-  const sizeKb = (statSync("./lib/index.d.ts").size / 1024).toFixed(2);
+  const sizeKb = (statSync("./lib/sdk/index.d.ts").size / 1024).toFixed(2);
   console.log(`📦 Final .d.ts size: ${sizeKb} KB`);
   console.log("✅ Build Completed");
 })();
