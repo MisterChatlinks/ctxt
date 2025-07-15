@@ -10,7 +10,7 @@
       "import": "./lib/sdk/monitext.esm.min.mjs"
    },
    "bin": {
-      "monitext": "npx node ./lib/sdk/cli/index.js"
+      "monitext": "./lib/cli/monicli.cjs.min.cjs"
    },
    "keywords": [
       "logger",
@@ -39,7 +39,8 @@
       "types": "npx tsc -p tsconfig.build.json && npx tsc-alias -p tsconfig.build.json",
       "bundle:types": "npx dts-bundle-generator -o ./lib/sdk/index.d.ts ./lib/types/src-sdk/index.d.ts",
       "bundle": "npx node ./esbuild.sdk.cjs",
-      "build": "npm run check && npm run test && npm run types && npm run bundle:types && npm run bundle"
+      "build:sdk": "npm run check && npm run test && npm run types && npm run bundle:types && npm run bundle",
+      "build:cli": "npx node ./esbuild.cli.cjs"
    },
    "author": "Catlinks",
    "license": "MIT",
@@ -59,13 +60,14 @@
       "url": "https://github.com/MisterChatlinks/monitor-txt.git"
    },
    "devDependencies": {
-      "cytoscape": "^3.32.1",
-      "inquirer": "^12.6.0",
       "@types/bun": "^1.2.18",
       "@types/deno": "^2.3.0",
       "@types/node": "^24.0.12",
+      "commander": "^14.0.0",
+      "cytoscape": "^3.32.1",
       "dts-bundle-generator": "^9.5.1",
       "esbuild": "^0.25.6",
+      "inquirer": "^12.6.0",
       "tsc-alias": "^1.8.16",
       "typescript": "^5.8.3",
       "vite": "^7.0.4",
