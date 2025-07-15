@@ -1,14 +1,14 @@
-#!/usr/bin/env node
+// // #!/usr/bin/env node
 
-import { cwd } from "process";
-import { inquireMonitextRuntime } from "./inquire";
-import { writeMonitextRuntime } from "./write";
+// import { cwd } from "process";
+// import { inquireMonitextRuntime } from "./inquire";
+// import { writeMonitextRuntime } from "./write";
 
-const path = cwd();
+// const path = cwd();
 
-(async ()=>{
-    const config = await inquireMonitextRuntime();
-    const param = { ...config };
-    delete param["flavor"];
-    writeMonitextRuntime(path, param, config.flavor)
-})()
+// (async () => {
+// 	const config = await inquireMonitextRuntime();
+// 	const param = { ...config };
+// 	delete param["flavor"];
+// 	writeMonitextRuntime(path, param, config.flavor);
+// })();
