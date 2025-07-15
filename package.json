@@ -1,44 +1,64 @@
 {
-   "name": "monitor-txt",
-   "version": "1.0.0",
-   "description": "console utility for live monitoring",
-   "type": "module",
+   "name": "monitext",
+   "version": "3.0.0",
+   "description": "A modern logger with policies, theming, and runtime resilience",
+   "type": "commonjs",
+   "types": "./lib/index.d.ts",
    "exports": {
-      "import": {
-         "types": "./lib/src/index.d.ts",
-         "default": "./lib/src/index.js"
-      },
-      "require": {
-         "types": "./lib/src/index.d.cts",
-         "default": "./lib/src/index.cjs"
-      }
+      "types": "./lib/index.d.ts",
+      "require": "./lib/monitext.cjs.min.cjs",
+      "import": "./lib/monitext.esm.min.mjs"
    },
    "bin": {
-      "monitext": "./lib/cli/index.js"
+      "monitext": "npx node ./lib/cli/index.js"
    },
    "keywords": [
-      "console",
       "logger",
-      "structured-logging",
-      "monitoring"
+      "monitor",
+      "policy",
+      "structured",
+      "logging",
+      "browser",
+      "cli",
+      "cross plateform"
    ],
    "scripts": {
-      "build": "tsup src/index.ts --format esm,cjs --dts --outDir ./lib/src && tsup src-cli/index.ts --format esm --outDir ./lib/cli"
+      "check": "npx tsc -noEmit",
+      "test": "npx vitest run --config vite.config.ts",
+      "types": "npx tsc && npx tsc-alias",
+      "bundle:types": "npx dts-bundle-generator -o ./lib/index.d.ts ./lib/types/sdk/src/index.d.ts",
+      "bundle": "npx node ./esbuild.config.cjs",
+      "build": "npm run check && npm run test && npm run types && npm run bundle:types && npm run bundle"
    },
-   "author": "",
+   "author": "Catlinks",
    "license": "MIT",
    "dependencies": {
-      "inquirer": "^12.6.0",
-      "openpgp": "^6.1.1"
+      "acorn": "^8.15.0",
+      "astring": "^1.9.0",
+      "chalk": "^5.4.1",
+      "cytoscape": "^3.32.1",
+      "estree-walker": "^3.0.3"
    },
+   "files": [
+      "lib",
+      "README.md",
+      "LICENSE"
+   ],
    "repository": {
       "type": "git",
       "url": "https://github.com/MisterChatlinks/monitor-txt.git"
    },
    "devDependencies": {
-      "@types/node": "^22.15.2",
-      "ts-node": "^10.9.2",
-      "tsup": "^8.5.0",
-      "vitest": "^3.1.2"
+      "inquirer": "^12.6.0",
+      "@types/bun": "^1.2.18",
+      "@types/deno": "^2.3.0",
+      "@types/node": "^24.0.12",
+      "dts-bundle-generator": "^9.5.1",
+      "esbuild": "^0.25.6",
+      "tsc-alias": "^1.8.16",
+      "typescript": "^5.8.3",
+      "vite": "^7.0.4",
+      "vite-tsconfig-paths": "^5.1.4",
+      "vitest": "^3.2.4"
    }
 }
