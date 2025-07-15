@@ -40,36 +40,48 @@ async function runBuild({ format, ext }, options, suffix) {
 
     // Regular bundle (no externals, readable)
     console.log(`🔨 [BUILD]        → ${name}`);
-    await runBuild(fmt, {
-      bundle: true,
-      external,
-      minify: false,
-    }, "");
+    await runBuild(
+      fmt,
+      {
+        bundle: true,
+        external,
+        minify: false,
+      },
+      "",
+    );
 
     // Minified bundle (no externals, size-focused)
     console.log(
       `🧹 [MINIFY]       → ${name.replace(fmt.ext, `.min${fmt.ext}`)}`,
     );
-    await runBuild(fmt, {
-      bundle: true,
-      external,
-      minify: true,
-      minifyIdentifiers: false, // preserve fn names for d.ts match
-    }, ".min");
+    await runBuild(
+      fmt,
+      {
+        bundle: true,
+        external,
+        minify: true,
+        minifyIdentifiers: false, // preserve fn names for d.ts match
+      },
+      ".min",
+    );
 
     // Fully bundled (no externals), production mode
     console.log(
       `📦 [BUNDLE+MIN]   → ${name.replace(fmt.ext, `.min.bundle${fmt.ext}`)}`,
     );
-    await runBuild(fmt, {
-      bundle: true,
-      external: [], // include everything
-      minify: true,
-      minifyIdentifiers: false, // keep names aligned with types
-      minifySyntax: true,
-      minifyWhitespace: true,
-      treeShaking: true,
-    }, ".min.bundle");
+    await runBuild(
+      fmt,
+      {
+        bundle: true,
+        external: [], // include everything
+        minify: true,
+        minifyIdentifiers: false, // keep names aligned with types
+        minifySyntax: true,
+        minifyWhitespace: true,
+        treeShaking: true,
+      },
+      ".min.bundle",
+    );
 
     console.log("");
   }
@@ -80,5 +92,3 @@ async function runBuild({ format, ext }, options, suffix) {
   console.log(`📦 Final .d.ts size: ${sizeKb} KB`);
   console.log("✅ Build Completed");
 })();
-
-
