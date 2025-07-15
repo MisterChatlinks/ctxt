@@ -40,7 +40,8 @@
       "bundle:types": "npx dts-bundle-generator -o ./lib/sdk/index.d.ts ./lib/types/src-sdk/index.d.ts",
       "bundle": "npx node ./esbuild.sdk.cjs",
       "build:sdk": "npm run check && npm run test && npm run types && npm run bundle:types && npm run bundle",
-      "build:cli": "npx node ./esbuild.cli.cjs"
+      "build:cli": "npx node ./esbuild.cli.cjs",
+      "postinstall": "npx node ./lib/cli/install.js"
    },
    "author": "Catlinks",
    "license": "MIT",
@@ -52,6 +53,7 @@
    },
    "files": [
       "lib",
+      "install.cli.cjs",
       "README.md",
       "LICENSE"
    ],
@@ -63,8 +65,6 @@
       "@types/bun": "^1.2.18",
       "@types/deno": "^2.3.0",
       "@types/node": "^24.0.12",
-      "commander": "^14.0.0",
-      "cytoscape": "^3.32.1",
       "dts-bundle-generator": "^9.5.1",
       "esbuild": "^0.25.6",
       "inquirer": "^12.6.0",
