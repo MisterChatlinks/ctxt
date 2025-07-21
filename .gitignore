@@ -1,3 +1,6 @@
 /prototypes
-/node_modules
-/src-cli/target/
+**/node_modules
+/packages/**/target/
+/files/**
+/files
+**/dist

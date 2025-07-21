@@ -1,0 +1,80 @@
+{
+   "name": "@monitext/sdk",
+   "version": "3.0.0",
+   "description": "A modern logger with policies, theming, and runtime resilience",
+   "type": "commonjs",
+   "types": "./lib/sdk/index.d.ts",
+   "exports": {
+      ".": {
+         "types": "./lib/index.d.ts",
+         "require": "./dist/monitext.min.bundle.noext.cjs",
+         "import": "./dist/monitext.min.bundle.noext.mjs"
+      },
+      "./bundle": {
+         "types": "./lib/index.d.ts",
+         "require": "./dist/monitext.min.bundle.cjs",
+         "import": "./dist/monitext.min.bundle.mjs"
+      }
+   },
+   "keywords": [
+      "logger",
+      "log",
+      "structured-logging",
+      "observability",
+      "logging-library",
+      "log-formatting",
+      "log-levels",
+      "monitoring",
+      "policy-based-logger",
+      "policy-logging",
+      "cli",
+      "terminal",
+      "console",
+      "browser",
+      "node",
+      "deno",
+      "bun",
+      "typescript",
+      "ts"
+   ],
+   "scripts": {
+      "check": "tsc -p tsconfig.build.json --noEmit",
+      "test": "vitest run --config vite.config.ts",
+      "types": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+      "bundle:types": "dts-bundle-generator -o ./dist/index.d.ts ./dist/types/src/index.d.ts",
+      "bundle": "bun run ./esbuild.ts",
+      "build": "bun run check && bun run test && bun run types && bun run bundle:types && bun run bundle"
+   },
+   "author": "Catlinks",
+   "license": "MIT",
+   "dependencies": {
+      "acorn": "^8.15.0",
+      "astring": "^1.9.0",
+      "chalk": "^5.4.1",
+      "estree-walker": "^3.0.3"
+   },
+   "files": [
+      "dist",
+      "README.md",
+      "LICENSE"
+   ],
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/MisterChatlinks/monitor-txt.git"
+   },
+   "devDependencies": {
+      "@types/bun": "^1.2.18",
+      "@types/deno": "^2.3.0",
+      "@types/node": "^24.0.12",
+      "dts-bundle-generator": "^9.5.1",
+      "esbuild": "^0.25.8",
+      "tsc-alias": "^1.8.16",
+      "typescript": "^5.8.3",
+      "vite": "^7.0.4",
+      "vite-tsconfig-paths": "^5.1.4",
+      "vitest": "^3.2.4",
+      "ts-node": "^10.9.2",
+      "@types/react": "^19.1.8"
+   },
+   "packageManager": "pnpm@10.13.1"
+}

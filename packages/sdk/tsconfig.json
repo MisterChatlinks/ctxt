@@ -1,0 +1,30 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".", // Ajoutez cette ligne pour expliciter le dossier de base
+    "paths": {
+      "@structs/*": [
+        "./src/structs/*"
+      ],
+      "@logger/*": [
+        "./src/logger/*"
+      ],
+      "@policies/*": [
+        "./src/policies/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      "@printUtils/*": [
+        "./src/printUtils/*"
+      ],
+      "@types/*": [
+        "./src/core/types/*"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ]
+    }
+  }, 
+  "include": ["./src/**/*", "./tests/**/*"],
+}
